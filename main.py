@@ -6,6 +6,10 @@ import re
 
 app = FastAPI()
 
+@app.get("/")
+def root():
+    return {"status": "running"}
+
 class AskRequest(BaseModel):
     video_url: str
     topic: str
@@ -63,10 +67,8 @@ def ask(data: AskRequest):
 
             cleaned_block = clean_text(text_block)
 
-            # Count how many topic words appear
             match_count = sum(1 for word in topic_words if word in cleaned_block)
 
-            # If most words match (at least half)
             if match_count >= max(1, len(topic_words) // 2):
                 timestamp = time_part.split(".")[0]
                 break
